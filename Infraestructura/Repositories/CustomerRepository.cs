@@ -1,73 +1,52 @@
-﻿using Core.Entities;
+﻿using Core.DTOs;
+using Core.Entities;
 using Core.Interfaces.Repositories;
-using System.Text.RegularExpressions;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using Infrastructure.Contexts;
+using System.Data.Entity;
+using System.Security.Policy;
 
 namespace Infrastructure.Repositories
 {
     public class CustomerRepository : ICustomerRepository
     {
-        private static List<Customer> _customers = [
-            new(){Id = 1, Name = "Jose"},
-            new(){Id = 2, Name = "Juan"},
-            ];
-        public List<Customer> List()
+        private readonly ApplicationDbContext _context;
+
+        public CustomerRepository(ApplicationDbContext context)
         {
-            return _customers;
+            _context = context;
         }
 
-        //Obtain by id
-        public Customer GetById(int id)
+        public List<CustomerDTO> Add(string name)
         {
-            var customer = _customers.FirstOrDefault(x => x.Id == id);
-            if (customer != null)
-            {
-                return customer;
-            }
-            else
-            {
-                throw new Exception("The id entered does not match any user.");
-            }
+            throw new NotImplementedException();
         }
 
-        //Add
-        public Customer PostPerson(Customer newcustomer)
+        public List<CustomerDTO> Delete(int id)
         {
-            _customers.Add(newcustomer);
-            return newcustomer;
+            throw new NotImplementedException();
         }
 
-        //Update
-        public Customer PutFromRoute(Customer updatecustomer, int id)
+        public List<CustomerDTO> Get(int id)
         {
-            var customer = _customers.FirstOrDefault(x => x.Id == id);
-            if (customer != null)
-            {
-                customer.Id = id;
-                customer.Name = updatecustomer.Name;
-                return (customer);
-            }
-            else
-            {
-                throw new Exception("The id entered does not match any user.");
-            }
+            throw new NotImplementedException();
         }
 
-        //Delete
-        public Customer DeleteFromRoute(Customer deletecustomer, int id)
+        public async Task<List<CustomerDTO>> List()
         {
-            var customer = _customers.FirstOrDefault(x => x.Id == id);
-            if (customer != null)
-            {
-                customer.Id = id;
-                customer.Name = deletecustomer.Name;
-                return (customer);
-            }
-            else
-            {
-                throw new Exception("The id entered does not match any user.");
-            }
-        }
+            var entities = await _context.Customers.ToListAsync();
 
+            var dtos = entities.Select(customer => new CustomerDTO
+            {
+                Id = customer.Id,
+                FullName = $"{customer.FirstName} {customer.LastName}"
+            });
+
+            return dtos.ToList();
+        } 
+
+        public List<CustomerDTO> Update(int id, string name)
+        {
+            throw new NotImplementedException();
+        } 
     }
 }

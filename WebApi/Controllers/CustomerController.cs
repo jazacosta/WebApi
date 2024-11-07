@@ -13,40 +13,38 @@ public class CustomerController : ControllerBase
         _customerRepository = customerRepository;
     }
 
-    [HttpGet("List")]
-    public IActionResult List()
+    [HttpGet("list")]
+    public async Task<IActionResult> List()
     {
-        return Ok(_customerRepository.List());
+        return Ok(await _customerRepository.List());
     }
 
     //Obtain customer by id
     [HttpGet("{id}")]
-    public IActionResult GetById([FromRoute] int id)
+    public IActionResult Get([FromRoute] int id)
     {
-        return Ok(_customerRepository.GetById(id));
+        return Ok(_customerRepository.Get(id));
     }
 
     //Add customer
-    [HttpPost("Add")]
-    public IActionResult PostPerson([FromBody] Customer newcustomer)
+    [HttpPost("add")]
+    public IActionResult Add([FromBody] Customer customer)
     {
-        return Ok(_customerRepository.PostPerson(newcustomer));
+        return Ok(_customerRepository.Add(customer.FirstName));
     }
 
     //Update customer
-    [HttpPut("{id}")]
-    public IActionResult PutFromRoute([FromRoute] int id, [FromBody] Customer updatecustomer)
+    [HttpPut("update")]
+    public IActionResult Update([FromRoute] int id, [FromBody] Customer customer)
     {
-        var customer = _customerRepository.PutFromRoute(updatecustomer, id);
-        return Ok(customer);
+        return Ok(_customerRepository.Update(customer.Id, customer.FirstName);
     }
 
     //Delete customer
     [HttpDelete("{id}")]
-    public IActionResult DeleteFromRoute([FromRoute] int id, Customer deletecustomer)
+    public IActionResult Delete([FromRoute] int id)
     {
-        var customer = _customerRepository.DeleteFromRoute(deletecustomer, id);
-        return Ok(customer);
+        return Ok(_customerRepository.Delete(id));
     }
 
 }
