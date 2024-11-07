@@ -28,16 +28,16 @@ public class CustomerController : ControllerBase
 
     //Add customer
     [HttpPost("add")]
-    public IActionResult Add([FromBody] Customer customer)
+    public async Task<IActionResult> Add([FromBody] Customer customer)
     {
-        return Ok(_customerRepository.Add(customer.FirstName));
+        return Ok(await _customerRepository.Add(customer.FirstName, customer.LastName));
     }
 
     //Update customer
     [HttpPut("update")]
-    public IActionResult Update([FromRoute] int id, [FromBody] Customer customer)
+    public IActionResult Update([FromBody] Customer customer)
     {
-        return Ok(_customerRepository.Update(customer.Id, customer.FirstName);
+        return Ok(_customerRepository.Update(customer.Id, customer.FirstName));
     }
 
     //Delete customer

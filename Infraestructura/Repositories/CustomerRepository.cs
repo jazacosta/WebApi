@@ -2,7 +2,7 @@
 using Core.Entities;
 using Core.Interfaces.Repositories;
 using Infrastructure.Contexts;
-using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Policy;
 
 namespace Infrastructure.Repositories
@@ -16,9 +16,18 @@ namespace Infrastructure.Repositories
             _context = context;
         }
 
-        public List<CustomerDTO> Add(string name)
+        public async Task<List<CustomerDTO>> Add(string firstName, string? lastName)
         {
-            throw new NotImplementedException();
+            var entity = new Customer
+            {
+                FirstName = firstName,
+                LastName = lastName
+            };
+
+            _context.Customers.Add(entity);
+            await _context.SaveChangesAsync(); //this impacts the database
+
+            return await List();
         }
 
         public List<CustomerDTO> Delete(int id)
@@ -26,7 +35,8 @@ namespace Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        public List<CustomerDTO> Get(int id)
+        //obtain by id
+        public CustomerDTO Get(int id)
         {
             throw new NotImplementedException();
         }
