@@ -3,6 +3,7 @@ using Core.Entities;
 using Core.Interfaces.Repositories;
 using Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.InteropServices;
 using System.Security.Policy;
 
 namespace Infrastructure.Repositories
@@ -30,33 +31,60 @@ namespace Infrastructure.Repositories
             return await List();
         }
 
-        public List<CustomerDTO> Delete(int id)
+        public async Task<CustomerDTO> Delete(int id)
         {
-            throw new NotImplementedException();
+            var entities = await _context.Customers.FirstOrDefaultAsync(x => x.Id == id);
+            if (entities == null)
+            {
+                throw new Exception("The id entered does not match any user.");
+            }
+
+            _context.Customers.Remove(entities);
+            await _context.SaveChangesAsync();
+
+            return AddTo(entities);
         }
 
         //obtain by id
-        public CustomerDTO Get(int id)
+        public async Task<CustomerDTO> Get(int id)
         {
-            throw new NotImplementedException();
+            var entities = await _context.Customers.FirstOrDefaultAsync(x => x.Id == id);
+            if (entities == null)
+            {
+                throw new Exception("The id entered does not match any user.");
+            }
+
+            return AddTo(entities);
+
         }
 
         public async Task<List<CustomerDTO>> List()
         {
             var entities = await _context.Customers.ToListAsync();
 
-            var dtos = entities.Select(customer => new CustomerDTO
-            {
-                Id = customer.Id,
-                FullName = $"{customer.FirstName} {customer.LastName}"
-            });
+            var dtos = entities.Select(customer => AddTo(customer));
 
-            return dtos.ToList();
+            return dtos.OrderBy(c => c.Id).ToList();
         } 
 
-        public List<CustomerDTO> Update(int id, string name)
+        public async Task<CustomerDTO> Update(int id, string firstName, string? lastName)
         {
-            throw new NotImplementedException();
-        } 
+            var entities = await _context.Customers.FirstOrDefaultAsync(x => x.Id == id);
+            if (entities == null)
+            {
+                throw new Exception("The id entered does not match any user.");
+            }
+
+            entities.FirstName = firstName;
+            entities.LastName = lastName;
+            await _context.SaveChangesAsync();
+            return AddTo(entities);
+        }
+
+        public CustomerDTO AddTo(Customer customer) => new()
+        {
+            Id = customer.Id,
+            FullName = $"{customer.FirstName} {customer.LastName}"
+        };
     }
 }

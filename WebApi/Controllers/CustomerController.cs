@@ -21,9 +21,9 @@ public class CustomerController : ControllerBase
 
     //Obtain customer by id
     [HttpGet("{id}")]
-    public IActionResult Get([FromRoute] int id)
+    public async Task<IActionResult> Get([FromRoute] int id)
     {
-        return Ok(_customerRepository.Get(id));
+        return Ok(await _customerRepository.Get(id));
     }
 
     //Add customer
@@ -34,17 +34,17 @@ public class CustomerController : ControllerBase
     }
 
     //Update customer
-    [HttpPut("update")]
-    public IActionResult Update([FromBody] Customer customer)
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update([FromBody] Customer customer)
     {
-        return Ok(_customerRepository.Update(customer.Id, customer.FirstName));
+        return Ok(await _customerRepository.Update(customer.Id, customer.FirstName, customer.LastName));
     }
 
     //Delete customer
     [HttpDelete("{id}")]
-    public IActionResult Delete([FromRoute] int id)
+    public async Task<IActionResult> Delete([FromRoute] int id)
     {
-        return Ok(_customerRepository.Delete(id));
+        return Ok(await _customerRepository.Delete(id));
     }
 
 }
