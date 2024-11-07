@@ -1,6 +1,7 @@
 ﻿using Core.DTOs;
 using Core.Entities;
 using Core.Interfaces.Repositories;
+using Core.Requests;
 using Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.InteropServices;
@@ -17,7 +18,7 @@ namespace Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<List<CustomerDTO>> Add(string firstName, string? lastName)
+        public async Task<CustomerDTO> Add(string firstName, string? lastName)
         {
             var entity = new Customer
             {
@@ -28,7 +29,7 @@ namespace Infrastructure.Repositories
             _context.Customers.Add(entity);
             await _context.SaveChangesAsync(); //this impacts the database
 
-            return await List();
+            return AddTo(entity);
         }
 
         public async Task<CustomerDTO> Delete(int id)
@@ -58,11 +59,14 @@ namespace Infrastructure.Repositories
 
         }
 
-        public async Task<List<CustomerDTO>> List()
+        public async Task<List<CustomerDTO>> List(PaginationRequest request)
         {
             var entities = await _context.Customers.ToListAsync();
 
-            var dtos = entities.Select(customer => AddTo(customer));
+            var dtos = entities
+                .Skip((request.Page -1) * request.PageSize)
+                .Take(request.PageSize)
+                .Select(customer => AddTo(customer));
 
             return dtos.OrderBy(c => c.Id).ToList();
         } 

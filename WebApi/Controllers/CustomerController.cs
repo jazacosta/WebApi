@@ -18,7 +18,7 @@ public class CustomerController : ControllerBase
     [HttpGet("list")]
     public async Task<IActionResult> List([FromQuery] PaginationRequest request)
     {
-        return Ok(await _customerRepository.List());
+        return Ok(await _customerRepository.List(request));
     }
 
     //Obtain customer by id
