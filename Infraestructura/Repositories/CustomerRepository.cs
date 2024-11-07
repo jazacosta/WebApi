@@ -84,7 +84,10 @@ namespace Infrastructure.Repositories
         public CustomerDTO AddTo(Customer customer) => new()
         {
             Id = customer.Id,
-            FullName = $"{customer.FirstName} {customer.LastName}"
+            FullName = $"{customer.FirstName} {customer.LastName}",
+            Email = customer.Email,
+            Phone = customer.Phone,
+            BirthDate = customer.BirthDate.ToShortDateString()
         };
     }
 }
