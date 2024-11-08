@@ -59,16 +59,21 @@ namespace Infrastructure.Repositories
 
         }
 
-        public async Task<List<CustomerDTO>> List(PaginationRequest request)
+        public async Task<List<CustomerDTO>> List(PaginationRequest request, CancellationToken cancellationToken)
         {
-            var entities = await _context.Customers.ToListAsync();
+            var dtos = await _context.Customers
+                .Skip((request.Page.Value - 1) * request.PageSize.Value)
+                .Take(request.PageSize.Value)
+                .Select(customer => new CustomerDTO
+                {
+                    Id = customer.Id,
+                    FullName = $"{customer.FirstName} {customer.LastName}",
+                    Email = customer.Email,
+                    Phone = customer.Phone,
+                    BirthDate = customer.BirthDate.ToShortDateString()
+                }).OrderBy(c => c.Id).ToListAsync();
 
-            var dtos = entities
-                .Skip((request.Page -1) * request.PageSize)
-                .Take(request.PageSize)
-                .Select(customer => AddTo(customer));
-
-            return dtos.OrderBy(c => c.Id).ToList();
+            return dtos;
         } 
 
         public async Task<CustomerDTO> Update(int id, string firstName, string? lastName)
