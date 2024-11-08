@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Core.Entities;
 using Core.Requests;
+using Core.DTOs;
 
 namespace WebApi.Controllers;
 public class CustomerController : ControllerBase
@@ -16,9 +17,9 @@ public class CustomerController : ControllerBase
 
     //implementar paginacion
     [HttpGet("list")]
-    public async Task<IActionResult> List([FromQuery] PaginationRequest request)
+    public async Task<IActionResult> List([FromQuery] PaginationRequest request, CancellationToken cancellationToken)
     {
-        return Ok(await _customerRepository.List(request));
+        return Ok(await _customerRepository.List(request, cancellationToken));
     }
 
     //Obtain customer by id
@@ -30,16 +31,16 @@ public class CustomerController : ControllerBase
 
     //Add customer
     [HttpPost("add")]
-    public async Task<IActionResult> Add([FromBody] Customer customer)
+    public async Task<IActionResult> Add([FromBody] CreateCustomerDTO createCustomerDTO)
     {
-        return Ok(await _customerRepository.Add(customer.FirstName, customer.LastName));
+        return Ok(await _customerRepository.Add(createCustomerDTO));
     }
 
     //Update customer
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Update([FromBody] Customer customer)
+    [HttpPut("update")]
+    public async Task<IActionResult> Update([FromBody] UpdateCustomerDTO updateCustomerDTO)
     {
-        return Ok(await _customerRepository.Update(customer.Id, customer.FirstName, customer.LastName));
+        return Ok(await _customerRepository.Update(updateCustomerDTO));
     }
 
     //Delete customer

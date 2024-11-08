@@ -18,34 +18,6 @@ namespace Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<CustomerDTO> Add(string firstName, string? lastName)
-        {
-            var entity = new Customer
-            {
-                FirstName = firstName,
-                LastName = lastName
-            };
-
-            _context.Customers.Add(entity);
-            await _context.SaveChangesAsync(); //this impacts the database
-
-            return AddTo(entity);
-        }
-
-        public async Task<CustomerDTO> Delete(int id)
-        {
-            var entities = await _context.Customers.FirstOrDefaultAsync(x => x.Id == id);
-            if (entities == null)
-            {
-                throw new Exception("The id entered does not match any user.");
-            }
-
-            _context.Customers.Remove(entities);
-            await _context.SaveChangesAsync();
-
-            return AddTo(entities);
-        }
-
         //obtain by id
         public async Task<CustomerDTO> Get(int id)
         {
@@ -70,13 +42,30 @@ namespace Infrastructure.Repositories
                     FullName = $"{customer.FirstName} {customer.LastName}",
                     Email = customer.Email,
                     Phone = customer.Phone,
-                    BirthDate = customer.BirthDate.ToShortDateString()
+                    BirthDate = customer.BirthDate
                 }).OrderBy(c => c.Id).ToListAsync();
 
             return dtos;
         } 
 
-        public async Task<CustomerDTO> Update(int id, string firstName, string? lastName)
+        public async Task<CustomerDTO> Add(CreateCustomerDTO createCustomerDTO)
+        {
+            var entity = new Customer
+            {
+                FirstName = createCustomerDTO.FirstName,
+                LastName = createCustomerDTO?.LastName,
+                Email = createCustomerDTO.Email,
+                Phone = createCustomerDTO.Phone,
+                BirthDate = createCustomerDTO.BirthDate
+            };
+
+            _context.Customers.Add(entity);
+            await _context.SaveChangesAsync(); //this impacts the database
+
+            return AddTo(entity);
+        }
+
+        public async Task<CustomerDTO> Delete(int id)
         {
             var entities = await _context.Customers.FirstOrDefaultAsync(x => x.Id == id);
             if (entities == null)
@@ -84,8 +73,27 @@ namespace Infrastructure.Repositories
                 throw new Exception("The id entered does not match any user.");
             }
 
-            entities.FirstName = firstName;
-            entities.LastName = lastName;
+            _context.Customers.Remove(entities);
+            await _context.SaveChangesAsync();
+
+            return AddTo(entities);
+        }
+
+        public async Task<CustomerDTO> Update(UpdateCustomerDTO updateCustomerDTO)
+        {
+            var entities = await _context.Customers.FirstOrDefaultAsync(x => x.Id == updateCustomerDTO.Id);
+            if (entities == null)
+            {
+                throw new Exception("The id entered does not match any user.");
+            }
+
+            entities.Id = updateCustomerDTO.Id;
+            entities.FirstName = updateCustomerDTO.FirstName;
+            entities.LastName = updateCustomerDTO.LastName;
+            entities.Email = updateCustomerDTO.Email;
+            entities.Phone = updateCustomerDTO.Phone;
+            entities.BirthDate = updateCustomerDTO.BirthDate;
+
             await _context.SaveChangesAsync();
             return AddTo(entities);
         }
@@ -96,7 +104,7 @@ namespace Infrastructure.Repositories
             FullName = $"{customer.FirstName} {customer.LastName}",
             Email = customer.Email,
             Phone = customer.Phone,
-            BirthDate = customer.BirthDate.ToShortDateString()
+            BirthDate = customer.BirthDate
         };
     }
 }
