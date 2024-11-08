@@ -1,6 +1,9 @@
-﻿using Core.Interfaces.Repositories;
+﻿using Core.DTOs;
+using Core.Interfaces.Repositories;
+using FluentValidation;
 using Infrastructure.Contexts;
 using Infrastructure.Repositories;
+using Infrastructure.Validations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,18 +19,24 @@ namespace Infrastructure
 
             return services;
         }
-    public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
-    {
-        var connectionString = configuration.GetConnectionString("Bootcamp");
-
-        services.AddDbContext<ApplicationDbContext>(options =>
+        public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
         {
-            options.UseNpgsql(connectionString);
-        });
+            var connectionString = configuration.GetConnectionString("Bootcamp");
 
-        return services;
+            services.AddDbContext<ApplicationDbContext>(options =>
+            {
+                options.UseNpgsql(connectionString);
+            });
+
+            return services;
         
-    }
+        }
+        public static IServiceCollection AddValidations(this IServiceCollection services)
+        {
+            services.AddScoped<IValidator<CreateCustomerDTO>, CreateValidation>();
+            services.AddScoped<IValidator<UpdateCustomerDTO>, UpdateValidation>();
+            return services;
+        }
     }
 
 }

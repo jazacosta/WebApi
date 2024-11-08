@@ -3,16 +3,21 @@ using Microsoft.AspNetCore.Mvc;
 using Core.Entities;
 using Core.Requests;
 using Core.DTOs;
+using FluentValidation;
 
 namespace WebApi.Controllers;
 public class CustomerController : ControllerBase
 {
     private readonly ICustomerRepository _customerRepository;
+    private readonly IValidator<CreateCustomerDTO> _createValidation;
+    private readonly IValidator<UpdateCustomerDTO> _updateValidation;
 
     //inyeccion de dependencias
-    public CustomerController(ICustomerRepository customerRepository)
+    public CustomerController(ICustomerRepository customerRepository, IValidator<CreateCustomerDTO> createValidation, IValidator<UpdateCustomerDTO> updateValidation)
     {
         _customerRepository = customerRepository;
+        _createValidation = createValidation;
+        _updateValidation = updateValidation;
     }
 
     //implementar paginacion
@@ -33,6 +38,11 @@ public class CustomerController : ControllerBase
     [HttpPost("add")]
     public async Task<IActionResult> Add([FromBody] CreateCustomerDTO createCustomerDTO)
     {
+        var result = await _createValidation.ValidateAsync(createCustomerDTO);
+        if (!result.IsValid)
+        {
+            return BadRequest(result);
+        }
         return Ok(await _customerRepository.Add(createCustomerDTO));
     }
 
@@ -40,6 +50,11 @@ public class CustomerController : ControllerBase
     [HttpPut("update")]
     public async Task<IActionResult> Update([FromBody] UpdateCustomerDTO updateCustomerDTO)
     {
+        var result = await _updateValidation.ValidateAsync(updateCustomerDTO);
+        if (!result.IsValid)
+        {
+            return BadRequest(result.Errors);
+        }
         return Ok(await _customerRepository.Update(updateCustomerDTO));
     }
 

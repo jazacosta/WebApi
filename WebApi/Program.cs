@@ -9,6 +9,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddValidations();
 builder.Services.AddRepositories();
 builder.Services.AddDatabase(builder.Configuration);
 

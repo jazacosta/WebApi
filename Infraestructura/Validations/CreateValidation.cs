@@ -22,6 +22,7 @@ public class CreateValidation : AbstractValidator<CreateCustomerDTO>
         RuleFor(create => create.Email)
             .NotEmpty()
             .NotNull()
+            .EmailAddress()
             .WithMessage("The email must have an at symbol");
 
         RuleFor(create => create.Phone)
@@ -30,8 +31,6 @@ public class CreateValidation : AbstractValidator<CreateCustomerDTO>
             .WithMessage("The phone number must have at least 10 numbers");
 
         RuleFor(create => create.BirthDate)
-            .NotEmpty()
-            .NotNull()
-            .WithMessage("The date format has to be yyyy/mm/dd");
+            .NotEmpty();
     }
 }
