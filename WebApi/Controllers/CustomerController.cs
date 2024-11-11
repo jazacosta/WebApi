@@ -21,21 +21,21 @@ public class CustomerController : ControllerBase
     }
 
     //implementar paginacion
-    [HttpGet("list")]
+    [HttpGet("Customer/list")]
     public async Task<IActionResult> List([FromQuery] PaginationRequest request, CancellationToken cancellationToken)
     {
         return Ok(await _customerRepository.List(request, cancellationToken));
     }
 
     //Obtain customer by id
-    [HttpGet("{id}")]
+    [HttpGet("Customer/{id}")]
     public async Task<IActionResult> Get([FromRoute] int id)
     {
         return Ok(await _customerRepository.Get(id));
     }
 
     //Add customer
-    [HttpPost("add")]
+    [HttpPost("Customer/add")]
     public async Task<IActionResult> Add([FromBody] CreateCustomerDTO createCustomerDTO)
     {
         var result = await _createValidation.ValidateAsync(createCustomerDTO);
@@ -47,7 +47,7 @@ public class CustomerController : ControllerBase
     }
 
     //Update customer
-    [HttpPut("update")]
+    [HttpPut("Customer/update")]
     public async Task<IActionResult> Update([FromBody] UpdateCustomerDTO updateCustomerDTO)
     {
         var result = await _updateValidation.ValidateAsync(updateCustomerDTO);
@@ -59,7 +59,7 @@ public class CustomerController : ControllerBase
     }
 
     //Delete customer
-    [HttpDelete("{id}")]
+    [HttpDelete("CustomerDelete/{id}")]
     public async Task<IActionResult> Delete([FromRoute] int id)
     {
         return Ok(await _customerRepository.Delete(id));

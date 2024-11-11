@@ -3,6 +3,7 @@ using Core.Entities;
 using Core.Interfaces.Repositories;
 using Core.Requests;
 using Infrastructure.Contexts;
+using Mapster;
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.InteropServices;
 using System.Security.Policy;
@@ -21,31 +22,38 @@ namespace Infrastructure.Repositories
         //obtain by id
         public async Task<CustomerDTO> Get(int id)
         {
-            var entities = await _context.Customers.FirstOrDefaultAsync(x => x.Id == id);
+            var entity = await VerifyExists(id);
+            return entity.Adapt<CustomerDTO>();
+
+            /*    .Include(x => x.Accounts)
+                .FirstOrDefaultAsync(x => x.Id == id);
             if (entities == null)
             {
                 throw new Exception("The id entered does not match any user.");
             }
 
-            return AddTo(entities);
+            return new CustomerDTO()
+            {
+                //Id = entities.Id,
+                FullName = $"{entities.FirstName} {entities.LastName}",
+                Email = entities.Email,
+                Phone = entities.Phone,
+                BirthDate = entities.BirthDate,
+                Accounts = entities.Accounts.Select(x => new DetailedCustoemrDTO)
+                {
+                    Id = entities.Accounts.Id,
+                    Number = entities.Accounts.Number,
+                    Balance = entities.Balance,
+                    OpeningDate = entities.OpeningDate
+                }
+            };*/
 
         }
 
         public async Task<List<CustomerDTO>> List(PaginationRequest request, CancellationToken cancellationToken)
         {
-            var dtos = await _context.Customers
-                .Skip((request.Page.Value - 1) * request.PageSize.Value)
-                .Take(request.PageSize.Value)
-                .Select(customer => new CustomerDTO
-                {
-                    Id = customer.Id,
-                    FullName = $"{customer.FirstName} {customer.LastName}",
-                    Email = customer.Email,
-                    Phone = customer.Phone,
-                    BirthDate = customer.BirthDate
-                }).OrderBy(c => c.Id).ToListAsync();
-
-            return dtos;
+            var entities = await _context.Customers.ToListAsync();
+            return entities.Adapt<List<CustomerDTO>>();
         } 
 
         public async Task<CustomerDTO> Add(CreateCustomerDTO createCustomerDTO)
@@ -67,16 +75,12 @@ namespace Infrastructure.Repositories
 
         public async Task<CustomerDTO> Delete(int id)
         {
-            var entities = await _context.Customers.FirstOrDefaultAsync(x => x.Id == id);
-            if (entities == null)
-            {
-                throw new Exception("The id entered does not match any user.");
-            }
+            var entity = await VerifyExists(id);
 
-            _context.Customers.Remove(entities);
+            _context.Customers.Remove(entity);
             await _context.SaveChangesAsync();
 
-            return AddTo(entities);
+            return AddTo(entity);
         }
 
         public async Task<CustomerDTO> Update(UpdateCustomerDTO updateCustomerDTO)
@@ -106,5 +110,12 @@ namespace Infrastructure.Repositories
             Phone = customer.Phone,
             BirthDate = customer.BirthDate
         };
+
+        private async Task<Customer> VerifyExists(int id)
+        {
+            var entity = await _context.Customers.FindAsync(id);
+            if (entity == null) throw new Exception("The id entered does not match any user.");
+            return entity;
+        }
     }
 }

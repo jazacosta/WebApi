@@ -1,4 +1,5 @@
 ﻿using Core.DTOs;
+using Core.Entities;
 using Core.Requests;
 
 namespace Core.Interfaces.Repositories;

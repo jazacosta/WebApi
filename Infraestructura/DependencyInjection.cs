@@ -4,18 +4,32 @@ using FluentValidation;
 using Infrastructure.Contexts;
 using Infrastructure.Repositories;
 using Infrastructure.Validations;
+using Mapster;
+using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace Infrastructure
 {
     public static class DependencyInjection
     {
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddRepositories();
+            services.AddDatabase(configuration);
+            services.AddValidations();
+            services.AddMapping();
+            
+            return services;
+        }
+
         //metodo de extension
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
             services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<IAccountRepository, AccountRepository>();
 
             return services;
         }
@@ -35,6 +49,16 @@ namespace Infrastructure
         {
             services.AddScoped<IValidator<CreateCustomerDTO>, CreateValidation>();
             services.AddScoped<IValidator<UpdateCustomerDTO>, UpdateValidation>();
+            return services;
+        }
+
+        public static IServiceCollection AddMapping(this IServiceCollection services)
+        {
+            var config = TypeAdapterConfig.GlobalSettings;
+            config.Scan(Assembly.GetExecutingAssembly());
+            services.AddSingleton(config);
+            services.AddScoped<IMapper, ServiceMapper>();
+            
             return services;
         }
     }
