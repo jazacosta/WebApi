@@ -14,5 +14,7 @@ namespace Core.Entities
         public string? Email { get; set; }
         public string? Phone { get; set; }
         public DateTime? BirthDate { get; set; }
+
+        public List<Account> Accounts { get; set; } = [];
     }
 }

@@ -8,6 +8,7 @@ namespace Infrastructure.Contexts
     {
         //representacion de customer en la base de datos
         public DbSet<Customer> Customers { get; set; } //code first
+        public DbSet<Account> Accounts { get; set; } 
 
         public ApplicationDbContext()
         {  
@@ -21,6 +22,7 @@ namespace Infrastructure.Contexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new CustomerConfiguration());
+            modelBuilder.ApplyConfiguration(new AccountConfiguration());
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
