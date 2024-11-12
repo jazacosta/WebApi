@@ -50,6 +50,7 @@ namespace Infrastructure
         {
             services.AddScoped<IValidator<CreateCustomerDTO>, CreateValidation>();
             services.AddScoped<IValidator<UpdateCustomerDTO>, UpdateValidation>();
+            services.AddScoped<IValidator<CreateCardDTO>, CreateCardValidation>();
             return services;
         }
 
