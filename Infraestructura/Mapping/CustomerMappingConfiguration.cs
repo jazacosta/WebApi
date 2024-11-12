@@ -14,6 +14,8 @@ public class CustomerMappingConfiguration : IRegister
             .Map(dest => dest.Phone, src => src.Phone)
             .Map(dest => dest.Email, src => src.Email)
             .Map(dest => dest.FullName, src => $"{src.FirstName} {src.LastName}")
-            .Map(dest => dest.BirthDate, src => src.BirthDate);
+            .Map(dest => dest.BirthDate, src => src.BirthDate)
+            .Map(dest => dest.Accounts, src => src.Accounts.Select(x => x.Adapt<DetailedAccountDTO>()));
+            
     }
 }

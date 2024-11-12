@@ -8,4 +8,6 @@ public class CustomerDTO
     public string? Phone { get; set; }
     public DateTime? BirthDate { get; set; }
 
+    public List<DetailedAccountDTO>? Accounts { get; set; }
+
 }

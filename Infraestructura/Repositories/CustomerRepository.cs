@@ -70,7 +70,9 @@ namespace Infrastructure.Repositories
             _context.Customers.Add(entity);
             await _context.SaveChangesAsync(); //this impacts the database
 
-            return AddTo(entity);
+            //return AddTo(entity);
+            return entity.Adapt<CustomerDTO>();
+
         }
 
         public async Task<CustomerDTO> Delete(int id)
@@ -80,16 +82,12 @@ namespace Infrastructure.Repositories
             _context.Customers.Remove(entity);
             await _context.SaveChangesAsync();
 
-            return AddTo(entity);
+            return entity.Adapt<CustomerDTO>();
         }
 
         public async Task<CustomerDTO> Update(UpdateCustomerDTO updateCustomerDTO)
         {
-            var entities = await _context.Customers.FirstOrDefaultAsync(x => x.Id == updateCustomerDTO.Id);
-            if (entities == null)
-            {
-                throw new Exception("The id entered does not match any user.");
-            }
+            var entities = await VerifyExists(updateCustomerDTO.Id);
 
             entities.Id = updateCustomerDTO.Id;
             entities.FirstName = updateCustomerDTO.FirstName;
@@ -99,17 +97,17 @@ namespace Infrastructure.Repositories
             entities.BirthDate = updateCustomerDTO.BirthDate;
 
             await _context.SaveChangesAsync();
-            return AddTo(entities);
+            return entities.Adapt<CustomerDTO>();
         }
 
-        public CustomerDTO AddTo(Customer customer) => new()
+        /*public CustomerDTO AddTo(Customer customer) => new()
         {
             Id = customer.Id,
             FullName = $"{customer.FirstName} {customer.LastName}",
             Email = customer.Email,
             Phone = customer.Phone,
             BirthDate = customer.BirthDate
-        };
+        };*/
 
         private async Task<Customer> VerifyExists(int id)
         {
