@@ -6,9 +6,10 @@ namespace Infrastructure.Contexts
 {
     public partial class ApplicationDbContext : DbContext
     {
-        //representacion de customer en la base de datos
+        //representacion en la base de datos
         public DbSet<Customer> Customers { get; set; } //code first
         public DbSet<Account> Accounts { get; set; } 
+        public DbSet<Card> Cards { get; set; } 
 
         public ApplicationDbContext()
         {  
@@ -23,6 +24,7 @@ namespace Infrastructure.Contexts
         {
             modelBuilder.ApplyConfiguration(new CustomerConfiguration());
             modelBuilder.ApplyConfiguration(new AccountConfiguration());
+            modelBuilder.ApplyConfiguration(new CardConfiguration());
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

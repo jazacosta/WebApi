@@ -30,6 +30,7 @@ namespace Infrastructure
         {
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<ICardRepository, CardRepository>();
 
             return services;
         }

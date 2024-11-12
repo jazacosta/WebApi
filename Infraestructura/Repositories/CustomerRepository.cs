@@ -54,7 +54,7 @@ namespace Infrastructure.Repositories
         {
             var entities = await _context.Customers.ToListAsync();
             return entities.Adapt<List<CustomerDTO>>();
-        } 
+        }
 
         public async Task<CustomerDTO> Add(CreateCustomerDTO createCustomerDTO)
         {
@@ -88,26 +88,19 @@ namespace Infrastructure.Repositories
         public async Task<CustomerDTO> Update(UpdateCustomerDTO updateCustomerDTO)
         {
             var entities = await VerifyExists(updateCustomerDTO.Id);
-
-            entities.Id = updateCustomerDTO.Id;
-            entities.FirstName = updateCustomerDTO.FirstName;
-            entities.LastName = updateCustomerDTO.LastName;
-            entities.Email = updateCustomerDTO.Email;
-            entities.Phone = updateCustomerDTO.Phone;
-            entities.BirthDate = updateCustomerDTO.BirthDate;
-
+            updateCustomerDTO.Adapt(entities);
             await _context.SaveChangesAsync();
             return entities.Adapt<CustomerDTO>();
         }
 
-        /*public CustomerDTO AddTo(Customer customer) => new()
+        public CustomerDTO AddTo(Customer customer) => new()
         {
             Id = customer.Id,
             FullName = $"{customer.FirstName} {customer.LastName}",
             Email = customer.Email,
             Phone = customer.Phone,
             BirthDate = customer.BirthDate
-        };*/
+        };
 
         private async Task<Customer> VerifyExists(int id)
         {
