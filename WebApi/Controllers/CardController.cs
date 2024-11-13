@@ -19,7 +19,7 @@ namespace WebApi.Controllers
         }
 
         //1
-        [HttpPost("Card/add")]
+        [HttpPost("add")]
         public async Task<IActionResult> Add([FromBody] CreateCardDTO createCardDTO)
         {
             var result = await _createCardValidation.ValidateAsync(createCardDTO);

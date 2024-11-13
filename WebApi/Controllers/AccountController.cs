@@ -20,6 +20,7 @@ namespace WebApi.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
+            throw new Exception("Something really bad happened");
             return Ok(await _accountRepository.GetById(id));
         }
     }

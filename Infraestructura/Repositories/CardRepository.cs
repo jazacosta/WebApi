@@ -23,7 +23,10 @@ public class CardRepository : ICardRepository
     {
         var entity = new Card
         {
-            //ver parametros
+            Type = createCardDTO.Type,
+            CreditLimit = createCardDTO.CreditLimit,
+            ExpirationDate = createCardDTO.ExpirationDate,
+            InterestRate = createCardDTO.InterestRate
         };
 
         _context.Cards.Add(entity);
