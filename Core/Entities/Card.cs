@@ -13,6 +13,6 @@ public class Card
     public float InterestRate { get; set; }
 
     public Customer Customer { get; set; } = null!;
-
-
+    public List<Charge> Charges { get; set; } = [];
+    //public List<Payment> Payments { get; set; } = [];
 }
