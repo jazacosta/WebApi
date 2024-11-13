@@ -62,9 +62,9 @@ namespace Infrastructure.Repositories
             {
                 FirstName = createCustomerDTO.FirstName,
                 LastName = createCustomerDTO?.LastName,
-                Email = createCustomerDTO.Email,
-                Phone = createCustomerDTO.Phone,
-                BirthDate = createCustomerDTO.BirthDate
+                Email = createCustomerDTO?.Email,
+                Phone = createCustomerDTO?.Phone,
+                BirthDate = createCustomerDTO?.BirthDate
             };
 
             _context.Customers.Add(entity);

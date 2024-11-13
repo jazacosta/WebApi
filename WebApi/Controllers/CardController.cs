@@ -25,7 +25,7 @@ namespace WebApi.Controllers
             var result = await _createCardValidation.ValidateAsync(createCardDTO);
             if (!result.IsValid)
             {
-                return BadRequest(result);
+                return BadRequest(result.Errors);
             }
             return Ok(await _cardRepository.Add(createCardDTO));
         }
@@ -38,6 +38,12 @@ namespace WebApi.Controllers
         }
 
         //3
+        [HttpGet("/Customer/{customerId}/cards/getAll")]
+        public async Task<List<DetailedCardDTO>> GetAll([FromRoute] int customerId)
+        {
+            return await _cardRepository.GetAll(customerId);
+        }
+
 
     }
 }

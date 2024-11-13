@@ -23,10 +23,14 @@ public class CardRepository : ICardRepository
     {
         var entity = new Card
         {
-            Type = createCardDTO.Type,
-            CreditLimit = createCardDTO.CreditLimit,
+            CustomerId = createCardDTO.CustomerId,
+            //Type = createCardDTO.Type,
+            //CreditLimit = createCardDTO.CreditLimit,
             ExpirationDate = createCardDTO.ExpirationDate,
-            InterestRate = createCardDTO.InterestRate
+            //InterestRate = createCardDTO.InterestRate,
+            Number = createCardDTO.Number,
+            Status = createCardDTO.Status,
+            //AvailableCredit = createCardDTO.AvailableCredit
         };
 
         _context.Cards.Add(entity);
@@ -66,16 +70,16 @@ public class CardRepository : ICardRepository
 
     }
 
-    
-
     //3
-    /*public async Task<List<DetailedCardDTO>> GetAll(int customerId)
+    public async Task<List<DetailedCardDTO>> GetAll(int customerId)
     {
-        var entity = await _context.Cards
-            .Where(x => x.CustomerId == customerId)
-            .ToListAsync();
+        var entity = await _context.Customers
+            .Include(x => x.Cards)
+            .FirstOrDefaultAsync(x => x.Id == customerId);
+         
+        if (entity == null) throw new Exception("Client not found");
 
-        return entity.Adapt<List<DetailedCardDTO>>();
+        return entity.Cards.Adapt<List<DetailedCardDTO>>();
     }
 
     private async Task<Card> VerifyExists(int CardId)
@@ -86,5 +90,5 @@ public class CardRepository : ICardRepository
     }
 
     //String.Join
-    */
+    
 }
