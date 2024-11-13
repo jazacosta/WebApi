@@ -31,6 +31,7 @@ namespace Infrastructure
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<ICardRepository, CardRepository>();
+            services.AddScoped<IChargeRepository, ChargeRepository>();
 
             return services;
         }
@@ -51,6 +52,7 @@ namespace Infrastructure
             services.AddScoped<IValidator<CreateCustomerDTO>, CreateValidation>();
             services.AddScoped<IValidator<UpdateCustomerDTO>, UpdateValidation>();
             services.AddScoped<IValidator<CreateCardDTO>, CreateCardValidation>();
+            services.AddScoped<IValidator<CreateChargeDTO>, CreateChargeValidation>();
             return services;
         }
 

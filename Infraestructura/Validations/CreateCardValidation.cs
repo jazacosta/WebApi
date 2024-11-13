@@ -9,7 +9,6 @@ public class CreateCardValidation : AbstractValidator<CreateCardDTO>
     {
         RuleFor(create => create.Type)
             .NotEmpty()
-            //.WithMessage("")
             .Length(3, 40);
         RuleFor(create => create.CreditLimit)
             .NotEmpty()
@@ -18,6 +17,6 @@ public class CreateCardValidation : AbstractValidator<CreateCardDTO>
         RuleFor(create => create.ExpirationDate)
             .NotEmpty()
             .NotNull()
-            .WithMessage("The expiration must be before the date 12/30/2029 (dd/mm/yyyy)");
+            .WithMessage("The expiration must be before the date 12/30/2029");
     }
 }

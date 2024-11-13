@@ -1,6 +1,6 @@
-﻿namespace Core.Entities;
+﻿namespace Core.DTOs;
 
-public class Charge
+public class ChargeDTO
 {
     public int ChargeId { get; set; }
     public int CardId { get; set; }
@@ -8,6 +8,4 @@ public class Charge
     public int AvailableCredit { get; set; }
     public string Description { get; set; } = string.Empty;
     public DateTime Date { get; set; }
-
-    public Card Card { get; set; } = null!;
 }
