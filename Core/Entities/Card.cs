@@ -14,5 +14,5 @@ public class Card
 
     public Customer Customer { get; set; } = null!;
     public List<Charge> Charges { get; set; } = [];
-    //public List<Payment> Payments { get; set; } = [];
+    public List<Payment> Payments { get; set; } = [];
 }

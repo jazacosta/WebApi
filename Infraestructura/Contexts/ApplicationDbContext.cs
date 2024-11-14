@@ -11,6 +11,7 @@ namespace Infrastructure.Contexts
         public DbSet<Account> Accounts { get; set; } 
         public DbSet<Card> Cards { get; set; } 
         public DbSet<Charge> Charges { get; set; } 
+        public DbSet<Payment> Payments { get; set; } 
 
         public ApplicationDbContext()
         {  
@@ -27,6 +28,7 @@ namespace Infrastructure.Contexts
             modelBuilder.ApplyConfiguration(new AccountConfiguration());
             modelBuilder.ApplyConfiguration(new CardConfiguration());
             modelBuilder.ApplyConfiguration(new ChargeConfiguration());
+            modelBuilder.ApplyConfiguration(new PaymentConfiguration());
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
