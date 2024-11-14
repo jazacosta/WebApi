@@ -13,7 +13,6 @@ public class CardConfiguration : IEntityTypeConfiguration<Card>
         entity
             .Property(x => x.Number)
             .IsRequired();
-
         entity
             .HasOne(x => x.Customer)
             .WithMany(x => x.Cards)

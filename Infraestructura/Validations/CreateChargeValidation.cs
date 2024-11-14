@@ -11,10 +11,6 @@ public class CreateChargeValidation : AbstractValidator<CreateChargeDTO>
             .NotEmpty()
             .NotNull()
             .WithMessage("The amount must be in a 1 - 500 range");
-        RuleFor(create => create.AvailableCredit)
-            .NotEmpty()
-            .NotNull()
-            .WithMessage("The credit limit must be in a - range.");
         RuleFor(create => create.Description)
             .NotEmpty()
             .NotNull();

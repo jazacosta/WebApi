@@ -19,19 +19,9 @@ public class CardRepository : ICardRepository
     }
 
     //1
-    public async Task<CardDTO> Add(CreateCardDTO createCardDTO)
+    public async Task<CardDTO> Create(CreateCardDTO createCardDTO)
     {
-        var entity = new Card
-        {
-            CustomerId = createCardDTO.CustomerId,
-            //Type = createCardDTO.Type,
-            //CreditLimit = createCardDTO.CreditLimit,
-            ExpirationDate = createCardDTO.ExpirationDate,
-            //InterestRate = createCardDTO.InterestRate,
-            Number = createCardDTO.Number,
-            Status = createCardDTO.Status,
-            //AvailableCredit = createCardDTO.AvailableCredit
-        };
+        var entity = createCardDTO.Adapt<Card>();
 
         _context.Cards.Add(entity);
         await _context.SaveChangesAsync(); //this impacts the database

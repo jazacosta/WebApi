@@ -1,5 +1,6 @@
 ﻿using Core.DTOs;
 using Core.Interfaces.Repositories;
+using Core.Interfaces.Services;
 using FluentValidation;
 using Infrastructure.Repositories;
 using Infrastructure.Validations;
@@ -11,24 +12,31 @@ namespace WebApi.Controllers
     {
         private readonly ICardRepository _cardRepository;
         private readonly IValidator<CreateCardDTO> _createCardValidation;
+        private readonly ICardService _service;
 
-        public CardController(ICardRepository cardRepository, IValidator<CreateCardDTO> createCardValidation)
+        public CardController(ICardRepository cardRepository, IValidator<CreateCardDTO> createCardValidation, ICardService cardService)
         {
             _cardRepository = cardRepository;
             _createCardValidation = createCardValidation;
+            _service = cardService;
         }
 
         //1
-        [HttpPost("add")]
-        public async Task<IActionResult> Add([FromBody] CreateCardDTO createCardDTO)
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] CreateCardDTO request)
         {
-            var result = await _createCardValidation.ValidateAsync(createCardDTO);
-            if (!result.IsValid)
-            {
-                return BadRequest(result.Errors);
-            }
-            return Ok(await _cardRepository.Add(createCardDTO));
+            return Ok(await _service.Create(request));
         }
+        //[HttpPost("add")]
+        //public async Task<IActionResult> Create([FromBody] CreateCardDTO createCardDTO)
+        //{
+        //    var result = await _createCardValidation.ValidateAsync(createCardDTO);
+        //    if (!result.IsValid)
+        //    {
+        //        return BadRequest(result.Errors);
+        //    }
+        //    return Ok(await _cardRepository.Create(createCardDTO));
+        //}
 
         //2
         [HttpGet("{CardId}")]

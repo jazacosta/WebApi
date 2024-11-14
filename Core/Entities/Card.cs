@@ -11,6 +11,7 @@ public class Card
     public int CreditLimit { get; set; }
     public int AvailableCredit {  get; set; }
     public float InterestRate { get; set; }
+    //public decimal Debt { get; set; }  
 
     public Customer Customer { get; set; } = null!;
     public List<Charge> Charges { get; set; } = [];

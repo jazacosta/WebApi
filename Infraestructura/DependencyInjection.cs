@@ -1,8 +1,10 @@
 ﻿using Core.DTOs;
 using Core.Interfaces.Repositories;
+using Core.Interfaces.Services;
 using FluentValidation;
 using Infrastructure.Contexts;
 using Infrastructure.Repositories;
+using Infrastructure.Services;
 using Infrastructure.Validations;
 using Mapster;
 using MapsterMapper;
@@ -21,6 +23,7 @@ namespace Infrastructure
             services.AddDatabase(configuration);
             services.AddValidations();
             services.AddMapping();
+            services.AddServices();
             
             return services;
         }
@@ -63,6 +66,13 @@ namespace Infrastructure
             services.AddSingleton(config);
             services.AddScoped<IMapper, ServiceMapper>();
             
+            return services;
+        }
+
+        public static IServiceCollection AddServices(this IServiceCollection services)
+        {
+            services.AddScoped<ICardService, CardService>();
+
             return services;
         }
     }

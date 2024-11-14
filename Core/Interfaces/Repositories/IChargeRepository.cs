@@ -4,5 +4,7 @@ namespace Core.Interfaces.Repositories;
 
 public interface IChargeRepository
 {
-    Task<ChargeDTO> Add(CreateChargeDTO createChargeDTO);
+    Task<ChargeDTO> CreateCharge(CreateChargeDTO createChargeDTO);
+
+    Task<bool> VerifyChargeAmount(int CardId, int Amount);
 }

@@ -19,14 +19,14 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("add")]
-        public async Task<IActionResult> Add([FromBody] CreateChargeDTO createChargeDTO)
+        public async Task<IActionResult> CreateCharge([FromBody] CreateChargeDTO createChargeDTO)
         {
             var result = await _createChargeValidation.ValidateAsync(createChargeDTO);
             if (!result.IsValid)
             {
                 return BadRequest(result.Errors);
             }
-            return Ok(await _chargeRepository.Add(createChargeDTO));
+            return Ok(await _chargeRepository.CreateCharge(createChargeDTO));
         }
     }
 }
