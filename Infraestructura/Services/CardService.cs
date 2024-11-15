@@ -13,10 +13,12 @@ public class CardService : ICardService
         _repository = repository;
         _chargeRepository = chargeRepository;
     }
+
     public async Task<CardDTO> Create(CreateCardDTO request)
     {
         return await _repository.Create(request);
     }
+
     public async Task<ChargeDTO> CreateCharge(CreateChargeDTO request)
     {
         var isTransactionAllowed = await _chargeRepository.VerifyChargeAmount(request.CardId, request.Amount);

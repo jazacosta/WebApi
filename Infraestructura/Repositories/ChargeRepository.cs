@@ -26,30 +26,6 @@ public class ChargeRepository : IChargeRepository
 
         await _context.SaveChangesAsync();
         return entity.Adapt<ChargeDTO>();
-
-        //new Charge
-        //{
-        //    CardId = createChargeDTO.CardId,
-        //    Amount = createChargeDTO.Amount,
-        //    AvailableCredit = createChargeDTO.AvailableCredit,
-        //    Description = createChargeDTO.Description,
-        //    Date = createChargeDTO.Date
-        //};
-
-        //_context.Charges.Add(entity);
-        //await _context.SaveChangesAsync();
-
-        //var dtos = new ChargeDTO()
-        //{
-        //    ChargeId = entity.ChargeId,
-        //    CardId = entity.CardId,
-        //    Amount = entity.Amount,
-        //    //AvailableCredit = entity.AvailableCredit,
-        //    Description = entity.Description,
-        //    Date = entity.Date
-        //};
-
-        //return dtos;
     }
 
     public async Task<bool> VerifyChargeAmount(int CardId, int Amount)

@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241115125706_NewEntity")]
+    partial class NewEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -209,39 +212,6 @@ namespace Infrastructure.Migrations
                     b.ToTable("Payments");
                 });
 
-            modelBuilder.Entity("Core.Entities.Product", b =>
-                {
-                    b.Property<int>("ProductId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ProductId"));
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("EntityId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("ProductId");
-
-                    b.HasIndex("EntityId");
-
-                    b.ToTable("Products");
-                });
-
             modelBuilder.Entity("Core.Entities.Account", b =>
                 {
                     b.HasOne("Core.Entities.Customer", "Customer")
@@ -297,17 +267,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("Card");
                 });
 
-            modelBuilder.Entity("Core.Entities.Product", b =>
-                {
-                    b.HasOne("Core.Entities.Entity", "Entity")
-                        .WithMany("Products")
-                        .HasForeignKey("EntityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Entity");
-                });
-
             modelBuilder.Entity("Core.Entities.Card", b =>
                 {
                     b.Navigation("Charges");
@@ -322,11 +281,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("Cards");
 
                     b.Navigation("Entities");
-                });
-
-            modelBuilder.Entity("Core.Entities.Entity", b =>
-                {
-                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }

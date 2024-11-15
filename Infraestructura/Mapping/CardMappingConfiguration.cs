@@ -51,8 +51,6 @@ public class CardMappingConfiguration : IRegister
 
         //CHARGE
         config.NewConfig<Charge, ChargeDTO>();
-
-
         config.NewConfig<Charge, CreateChargeDTO>();
     }
 

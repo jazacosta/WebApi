@@ -1,6 +1,7 @@
 ﻿using Core.DTOs;
 using Core.Interfaces.Repositories;
 using Core.Interfaces.Services;
+using Core.Requests;
 using FluentValidation;
 using Infrastructure.Contexts;
 using Infrastructure.Repositories;
@@ -35,6 +36,7 @@ namespace Infrastructure
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<ICardRepository, CardRepository>();
             services.AddScoped<IChargeRepository, ChargeRepository>();
+            services.AddScoped<IEntityRepository, EntityRepository>();
 
             return services;
         }
@@ -56,6 +58,8 @@ namespace Infrastructure
             services.AddScoped<IValidator<UpdateCustomerDTO>, UpdateValidation>();
             services.AddScoped<IValidator<CreateCardDTO>, CreateCardValidation>();
             services.AddScoped<IValidator<CreateChargeDTO>, CreateChargeValidation>();
+            services.AddScoped<IValidator<CreateEntityRequest>, CreateEntityValidation>();
+            services.AddScoped<IValidator<UpdateEntityRequest>, UpdateEntityValidation>();
             return services;
         }
 
@@ -72,6 +76,7 @@ namespace Infrastructure
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
             services.AddScoped<ICardService, CardService>();
+            services.AddScoped<IEntityService, EntityService>();
 
             return services;
         }

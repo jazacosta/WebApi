@@ -17,5 +17,8 @@ namespace Core.Entities
 
         public List<Account> Accounts { get; set; } = [];
         public List<Card> Cards { get; set; } = [];
+
+        //lista de entidades
+        public List<Entity> Entities { get; set; } = [];
     }
 }
