@@ -1,4 +1,5 @@
-﻿using Core.DTOs;
+﻿using Core.DTOs.Entity;
+using Core.DTOs.Payment;
 using Core.Entities;
 using Core.Requests;
 using Mapster;
@@ -13,6 +14,10 @@ public class EntityMappingConfiguration
         config.NewConfig<Entity, EntityDTO>();
         config.NewConfig<Entity, CreateEntityRequest>();
         config.NewConfig<Entity, UpdateEntityRequest>();
+
+        config.NewConfig<Payment, PaymentDTO>();
+        config.NewConfig<Payment, CreatePaymentDTO>();
+
 
     }
     //PRODUCT

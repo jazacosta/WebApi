@@ -1,4 +1,4 @@
-﻿using Core.DTOs;
+﻿using Core.DTOs.Card;
 
 namespace Core.Interfaces.Repositories;
 

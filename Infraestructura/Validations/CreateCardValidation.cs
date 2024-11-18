@@ -1,4 +1,4 @@
-﻿using Core.DTOs;
+﻿using Core.DTOs.Card;
 using FluentValidation;
 
 namespace Infrastructure.Validations;

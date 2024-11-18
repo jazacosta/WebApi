@@ -1,4 +1,6 @@
-﻿using Core.DTOs;
+﻿using Core.DTOs.Card;
+using Core.DTOs.Charge;
+using Core.DTOs.Customer;
 using Core.Interfaces.Repositories;
 using Core.Interfaces.Services;
 using Core.Requests;

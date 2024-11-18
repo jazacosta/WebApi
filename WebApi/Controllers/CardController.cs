@@ -1,4 +1,4 @@
-﻿using Core.DTOs;
+﻿using Core.DTOs.Card;
 using Core.Interfaces.Repositories;
 using Core.Interfaces.Services;
 using FluentValidation;

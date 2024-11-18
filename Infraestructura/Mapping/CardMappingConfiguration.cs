@@ -1,4 +1,5 @@
-﻿using Core.DTOs;
+﻿using Core.DTOs.Card;
+using Core.DTOs.Charge;
 using Core.Entities;
 using Mapster;
 
@@ -10,48 +11,27 @@ public class CardMappingConfiguration : IRegister
     {
         //CARD
         //1
-        //var random = new Random();
         config.NewConfig<Card, CreateCardDTO>()
-            .Map(dest => dest.Number, src => $"XXXX-XXXX-XXXX-{src.Number.Substring(src.Number.Length - 4),4}");
-            /*//.Map(dest => dest.Number, src => GetCardNumber())
-            .Map(dest => dest.Type, src => src.Type)
-            .Map(dest => dest.CreditLimit, src => src.CreditLimit)
-            .Map(dest => dest.ExpirationDate, src => src.ExpirationDate)
-            .Map(dest => dest.InterestRate, src => src.InterestRate)
-            //.Map(dest => dest.AvailableCredit, src => random.Next(100, 10000))
-            .Map(dest => dest.AvailableCredit, src => src.AvailableCredit)
-            .Map(dest => dest.CustomerId, src => src.CustomerId);
-        //
-        //.Map(dest => dest.Status, src => "active");
-            */
+            .Map(dest => dest.Number, src => GetCardNumber())
+            .Map(dest => dest.AvailableCredit, src => new Random().Next(0, (int)src.CreditLimit))
+            .Map(dest => dest.Status, src => "active");
 
 
         //2
         config.NewConfig<Card, CardDTO>()
-            /*.Map(dest => dest.CardId, src => src.CardId)
-            .Map(dest => dest.CustomerId, src => src.CustomerId)
-            .Map(dest => dest.Type, src => src.Type)
-            .Map(dest => dest.ExpirationDate, src => src.ExpirationDate)
-            .Map(dest => dest.CreditLimit, src => src.CreditLimit)
-            .Map(dest => dest.InterestRate, src => src.InterestRate)
-            .Map(dest => dest.AvailableCredit, src => src.AvailableCredit)
-            .Map(dest => dest.Status, src => "active")
-            //ver generador de 16 numeros de a 4 random*/
-            .Map(dest => dest.Number, src => $"XXXX-XXXX-XXXX-{src.Number.Substring(src.Number.Length - 4),4}");
+            .Map(dest => dest.Number, src => $"XXXX-XXXX-XXXX-{src.Number.Substring(src.Number.Length - 4, 4)}");
 
         //3
         config.NewConfig<Card, DetailedCardDTO>()
-            .Map(dest => dest.Number, src => $"XXXX-XXXX-XXXX-{src.Number.Substring(src.Number.Length - 4),4}");
-
-        /*.Map(dest => dest.CardId, src => src.CardId)
-        .Map(dest => dest.ExpirationDate, src => src.ExpirationDate)
-        .Map(dest => dest.CreditLimit, src => src.CreditLimit)
-        .Map(dest => dest.AvailableCredit, src => src.AvailableCredit);*/
+            .Map(dest => dest.Number, src => $"XXXX-XXXX-XXXX-{src.Number.Substring(src.Number.Length - 4, 4)}");
 
 
         //CHARGE
-        config.NewConfig<Charge, ChargeDTO>();
-        config.NewConfig<Charge, CreateChargeDTO>();
+        config.NewConfig<Charge, ChargeDTO>()
+        .Map(dest => dest.Date, src => src.Date.ToShortDateString());
+
+        config.NewConfig<Charge, CreateChargeDTO>()
+        .Map(dest => dest.Date, src => src.Date.ToShortDateString());
     }
 
     public static string GetCardNumber()

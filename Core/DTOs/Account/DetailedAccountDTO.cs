@@ -1,6 +1,7 @@
-﻿using Core.Entities;
+﻿using Core.DTOs.Customer;
+using Core.Entities;
 
-namespace Core.DTOs;
+namespace Core.DTOs.Account;
 
 public class DetailedAccountDTO
 {

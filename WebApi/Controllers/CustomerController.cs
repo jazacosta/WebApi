@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Core.Entities;
 using Core.Requests;
-using Core.DTOs;
 using FluentValidation;
+using Core.DTOs.Customer;
 
 namespace WebApi.Controllers;
 public class CustomerController : ControllerBase

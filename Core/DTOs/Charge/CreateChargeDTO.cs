@@ -1,8 +1,8 @@
-﻿namespace Core.DTOs;
+﻿namespace Core.DTOs.Charge;
 
 public class CreateChargeDTO
 {
-    public int CardId { get; set; }
+    //public int CardId { get; set; }
     public int Amount { get; set; }
     //public int AvailableCredit { get; set; }
     public string Description { get; set; } = string.Empty;

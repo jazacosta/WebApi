@@ -1,5 +1,6 @@
-﻿using Core.DTOs;
+﻿using Core.DTOs.Charge;
 using Core.Interfaces.Repositories;
+using Core.Interfaces.Services;
 using FluentValidation;
 using Infrastructure.Repositories;
 using Infrastructure.Validations;
@@ -9,24 +10,23 @@ namespace WebApi.Controllers
 {
     public class ChargeController : BaseApiController
     {
-        private readonly IChargeRepository _chargeRepository;
+        // de más?
+        //private readonly IChargeRepository _chargeRepository;
+        //
         private readonly IValidator<CreateChargeDTO> _createChargeValidation;
+        private readonly ICardService _cardService;
 
-        public ChargeController(IChargeRepository chargeRepository, IValidator<CreateChargeDTO> createChargeValidation)
+        public ChargeController(IValidator<CreateChargeDTO> createChargeValidation, ICardService cardService)
         {
-            _chargeRepository = chargeRepository;
+            //_chargeRepository = chargeRepository;
             _createChargeValidation = createChargeValidation;
+            _cardService = cardService;
         }
 
-        [HttpPost("add")]
-        public async Task<IActionResult> CreateCharge([FromBody] CreateChargeDTO createChargeDTO)
+        [HttpPost("{CardId}/addCharge")]
+        public async Task<IActionResult> CreateCharge([FromRoute] int CardId, [FromBody] CreateChargeDTO createChargeDTO)
         {
-            var result = await _createChargeValidation.ValidateAsync(createChargeDTO);
-            if (!result.IsValid)
-            {
-                return BadRequest(result.Errors);
-            }
-            return Ok(await _chargeRepository.CreateCharge(createChargeDTO));
+            return Ok(await _cardService.CreateCharge(CardId, createChargeDTO));
         }
     }
 }

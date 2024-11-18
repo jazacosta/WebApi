@@ -1,4 +1,4 @@
-﻿using Core.DTOs;
+﻿using Core.DTOs.Charge;
 using Core.Entities;
 using Core.Interfaces.Repositories;
 using Infrastructure.Contexts;
@@ -15,12 +15,15 @@ public class ChargeRepository : IChargeRepository
         _context = context;
     }
 
-    public async Task<ChargeDTO> CreateCharge(CreateChargeDTO createChargeDTO)
+    public async Task<ChargeDTO> CreateCharge(int CardId, CreateChargeDTO createChargeDTO)
     {
+        var card = await _context.Cards.FindAsync(CardId);
+
         var entity = createChargeDTO.Adapt<Charge>();
-        var card = await _context.Cards.FindAsync(createChargeDTO.CardId);
+        entity.CardId = CardId; 
         entity.AvailableCredit = card!.AvailableCredit - createChargeDTO.Amount;
-        card!.AvailableCredit -= createChargeDTO.Amount;
+
+        card.AvailableCredit -= createChargeDTO.Amount;
 
         _context.Charges.Add(entity);
 
@@ -31,8 +34,8 @@ public class ChargeRepository : IChargeRepository
     public async Task<bool> VerifyChargeAmount(int CardId, int Amount)
     {
         var card = await _context.Cards.FindAsync(CardId);
-        return card == null
-            ? throw new Exception("The card with Id provided was not found")
-            : card.CreditLimit - card.AvailableCredit >= Amount;
+        if (card == null)
+            throw new Exception("The card with the Id provided was not found");
+        return card.CreditLimit >= Amount;
     }
 }

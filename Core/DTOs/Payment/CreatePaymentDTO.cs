@@ -1,10 +1,10 @@
-﻿namespace Core.DTOs;
+﻿namespace Core.DTOs.Payment;
 
 public class CreatePaymentDTO
 {
-    public int CardId { get; set; }
+    //public int CardId { get; set; }
     public int Amount { get; set; }
-    public int AvailableCredit { get; set; }
+    //public int AvailableCredit { get; set; }
     public string PaymentMethod { get; set; } = string.Empty;
     public DateTime Date { get; set; }
 }

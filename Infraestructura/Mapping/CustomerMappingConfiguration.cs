@@ -1,4 +1,5 @@
-﻿using Core.DTOs;
+﻿using Core.DTOs.Account;
+using Core.DTOs.Customer;
 using Core.Entities;
 using Infrastructure.Configuration;
 using Mapster;
