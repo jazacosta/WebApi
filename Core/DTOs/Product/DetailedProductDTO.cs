@@ -1,6 +1,6 @@
-﻿namespace Core.Entities;
+﻿namespace Core.DTOs.Product;
 
-public class Product
+public class DetailedProductDTO
 {
     public int ProductId { get; set; }
     public string Name { get; set; } = string.Empty;
@@ -8,7 +8,4 @@ public class Product
     public string Status { get; set; } = string.Empty;
     public DateTime Date { get; set; }
     public int EntityId { get; set; }
-
-    public Entity Entity { get; set; } = null!;
-    public List<CustomerEntityProduct> CustomerEntityProducts { get; set; } = null!;
 }

@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241115132008_ProductEntity")]
-    partial class ProductEntity
+    [Migration("20241118125428_NewCustomerEntities")]
+    partial class NewCustomerEntities
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -155,6 +155,52 @@ namespace Infrastructure.Migrations
                     b.ToTable("Customers");
                 });
 
+            modelBuilder.Entity("Core.Entities.CustomerEntity", b =>
+                {
+                    b.Property<int>("CustomerEntityId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("CustomerEntityId"));
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("EntityId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("CustomerEntityId");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("EntityId");
+
+                    b.ToTable("CustomerEntity");
+                });
+
+            modelBuilder.Entity("Core.Entities.CustomerEntityProduct", b =>
+                {
+                    b.Property<int>("CustomerEntityProductId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("CustomerEntityProductId"));
+
+                    b.Property<int>("CustomerEntityId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("CustomerEntityProductId");
+
+                    b.HasIndex("CustomerEntityId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("CustomerEntityProducts");
+                });
+
             modelBuilder.Entity("Core.Entities.Entity", b =>
                 {
                     b.Property<int>("EntityId")
@@ -278,6 +324,44 @@ namespace Infrastructure.Migrations
                     b.Navigation("Card");
                 });
 
+            modelBuilder.Entity("Core.Entities.CustomerEntity", b =>
+                {
+                    b.HasOne("Core.Entities.Customer", "Customer")
+                        .WithMany("CustomerEntities")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Core.Entities.Entity", "Entity")
+                        .WithMany("CustomerEntities")
+                        .HasForeignKey("EntityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("Entity");
+                });
+
+            modelBuilder.Entity("Core.Entities.CustomerEntityProduct", b =>
+                {
+                    b.HasOne("Core.Entities.CustomerEntity", "CustomerEntity")
+                        .WithMany("CustomerEntityProducts")
+                        .HasForeignKey("CustomerEntityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Core.Entities.Product", "Products")
+                        .WithMany("CustomerEntityProducts")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CustomerEntity");
+
+                    b.Navigation("Products");
+                });
+
             modelBuilder.Entity("Core.Entities.Entity", b =>
                 {
                     b.HasOne("Core.Entities.Customer", "Customer")
@@ -324,12 +408,26 @@ namespace Infrastructure.Migrations
 
                     b.Navigation("Cards");
 
+                    b.Navigation("CustomerEntities");
+
                     b.Navigation("Entities");
+                });
+
+            modelBuilder.Entity("Core.Entities.CustomerEntity", b =>
+                {
+                    b.Navigation("CustomerEntityProducts");
                 });
 
             modelBuilder.Entity("Core.Entities.Entity", b =>
                 {
+                    b.Navigation("CustomerEntities");
+
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("Core.Entities.Product", b =>
+                {
+                    b.Navigation("CustomerEntityProducts");
                 });
 #pragma warning restore 612, 618
         }

@@ -17,7 +17,7 @@ namespace WebApi.Controllers
             _accountRepository = accountRepository;
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("get/{id}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
             return Ok(await _accountRepository.GetById(id));

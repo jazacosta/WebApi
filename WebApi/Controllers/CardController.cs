@@ -22,7 +22,7 @@ namespace WebApi.Controllers
         }
 
         //1
-        [HttpPost]
+        [HttpPost("add")]
         public async Task<IActionResult> Create([FromBody] CreateCardDTO request)
         {
             return Ok(await _service.Create(request));
@@ -40,14 +40,14 @@ namespace WebApi.Controllers
 
         //2
 
-        [HttpGet("{CardId}")]
+        [HttpGet("get/{CardId}")]
         public async Task<IActionResult> Get([FromRoute] int CardId)
         {
             return Ok(await _cardRepository.Get(CardId));
         }
 
         //3
-        [HttpGet("/Customer/{customerId}/cards/getAll")]
+        [HttpGet("getAll/{customerId}")]
         public async Task<List<DetailedCardDTO>> GetAll([FromRoute] int customerId)
         {
             return await _cardRepository.GetAll(customerId);

@@ -13,4 +13,5 @@ public class Entity
 
     //lista de productos
     public List<Product> Products { get; set; } = [];
+    public List<CustomerEntity> CustomerEntities { get; set; } = [];
 }

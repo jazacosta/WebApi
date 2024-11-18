@@ -1,6 +1,7 @@
 ﻿using Core.DTOs.Card;
 using Core.DTOs.Charge;
 using Core.DTOs.Customer;
+using Core.DTOs.Payment;
 using Core.Interfaces.Repositories;
 using Core.Interfaces.Services;
 using Core.Requests;
@@ -38,7 +39,9 @@ namespace Infrastructure
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<ICardRepository, CardRepository>();
             services.AddScoped<IChargeRepository, ChargeRepository>();
+            services.AddScoped<IPaymentRepository, PaymentRepository>();
             services.AddScoped<IEntityRepository, EntityRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
 
             return services;
         }
@@ -60,6 +63,7 @@ namespace Infrastructure
             services.AddScoped<IValidator<UpdateCustomerDTO>, UpdateValidation>();
             services.AddScoped<IValidator<CreateCardDTO>, CreateCardValidation>();
             services.AddScoped<IValidator<CreateChargeDTO>, CreateChargeValidation>();
+            services.AddScoped<IValidator<CreatePaymentDTO>, CreatePaymentValidation>();
             services.AddScoped<IValidator<CreateEntityRequest>, CreateEntityValidation>();
             services.AddScoped<IValidator<UpdateEntityRequest>, UpdateEntityValidation>();
             return services;

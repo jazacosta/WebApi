@@ -28,7 +28,7 @@ public class CustomerController : ControllerBase
     }
 
     //Obtain customer by id
-    [HttpGet("Customer/{id}")]
+    [HttpGet("Customer/get/{id}")]
     public async Task<IActionResult> Get([FromRoute] int id)
     {
         return Ok(await _customerRepository.Get(id));
@@ -59,7 +59,7 @@ public class CustomerController : ControllerBase
     }
 
     //Delete customer
-    [HttpDelete("CustomerDelete/{id}")]
+    [HttpDelete("Customer/delete/{id}")]
     public async Task<IActionResult> Delete([FromRoute] int id)
     {
         return Ok(await _customerRepository.Delete(id));

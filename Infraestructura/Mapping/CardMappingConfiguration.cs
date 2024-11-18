@@ -1,5 +1,6 @@
 ﻿using Core.DTOs.Card;
 using Core.DTOs.Charge;
+using Core.DTOs.Payment;
 using Core.Entities;
 using Mapster;
 
@@ -15,12 +16,9 @@ public class CardMappingConfiguration : IRegister
             .Map(dest => dest.Number, src => GetCardNumber())
             .Map(dest => dest.AvailableCredit, src => new Random().Next(0, (int)src.CreditLimit))
             .Map(dest => dest.Status, src => "active");
-
-
         //2
         config.NewConfig<Card, CardDTO>()
             .Map(dest => dest.Number, src => $"XXXX-XXXX-XXXX-{src.Number.Substring(src.Number.Length - 4, 4)}");
-
         //3
         config.NewConfig<Card, DetailedCardDTO>()
             .Map(dest => dest.Number, src => $"XXXX-XXXX-XXXX-{src.Number.Substring(src.Number.Length - 4, 4)}");
@@ -31,6 +29,13 @@ public class CardMappingConfiguration : IRegister
         .Map(dest => dest.Date, src => src.Date.ToShortDateString());
 
         config.NewConfig<Charge, CreateChargeDTO>()
+        .Map(dest => dest.Date, src => src.Date.ToShortDateString());
+
+        //PAYMENT
+        config.NewConfig<Payment, PaymentDTO>()
+        .Map(dest => dest.Date, src => src.Date.ToShortDateString());
+
+        config.NewConfig<Payment, CreatePaymentDTO>()
         .Map(dest => dest.Date, src => src.Date.ToShortDateString());
     }
 

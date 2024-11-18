@@ -18,7 +18,7 @@ namespace WebApi.Controllers
             _cardService = cardService;
         }
     
-        [HttpPost("{CardId}/addPayment")]
+        [HttpPost("add/{CardId}")]
         public async Task<IActionResult> AddPayment([FromRoute] int CardId, [FromBody] CreatePaymentDTO createPaymentDTO)
         {
             return Ok(await _cardService.CreatePayment(CardId, createPaymentDTO));
