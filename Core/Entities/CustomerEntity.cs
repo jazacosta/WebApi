@@ -7,6 +7,6 @@ public class CustomerEntity
     public int EntityId { get; set; }
     public Customer Customer { get; set; } = null!;
     public Entity Entity { get; set; } = null!;
-    public List<CustomerEntityProduct> CustomerEntityProducts { get; set; } = null!;
+    public List<CustomerEntityProduct> CustomerEntityProducts { get; set; } = [];
 
 }

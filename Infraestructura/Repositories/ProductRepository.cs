@@ -1,6 +1,7 @@
 ﻿using Core.DTOs.Product;
 using Core.Entities;
 using Infrastructure.Contexts;
+using Mapster;
 
 namespace Infrastructure.Repositories;
 
@@ -13,9 +14,12 @@ public class ProductRepository : IProductRepository
         _context = context;
     }
 
-    public Task<DetailedProductDTO> Create(int EntityId, CreateProductDTO createProductDTO)
+    public async Task<DetailedProductDTO> Create(int EntityId, CreateProductDTO createProductDTO)
     {
-        throw new NotImplementedException();
+        var entity = createProductDTO.Adapt<Product>();
+        _context.Products.Add(entity);
+        await _context.SaveChangesAsync();
+        return entity.Adapt<DetailedProductDTO>();
     }
 
     public async Task<Product> VerifyExist(int EntityId)
