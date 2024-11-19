@@ -1,4 +1,5 @@
 ﻿using Core.DTOs.Customer;
+using Core.DTOs.Product;
 using Core.Entities;
 using Core.Requests;
 
@@ -11,4 +12,5 @@ public interface ICustomerRepository
     Task<CustomerDTO> Add(CreateCustomerDTO createCustomerDTO);
     Task<CustomerDTO> Update(UpdateCustomerDTO updateCustomerDTO);
     Task<CustomerDTO> Delete(int id);
+    Task<CustomerProductDTO> GetProducts(int id);
 }

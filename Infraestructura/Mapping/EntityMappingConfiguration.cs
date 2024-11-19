@@ -15,15 +15,16 @@ public class EntityMappingConfiguration
         config.NewConfig<Entity, EntityDTO>();
         config.NewConfig<Entity, CreateEntityRequest>();
         config.NewConfig<Entity, UpdateEntityRequest>();
-        config.NewConfig<Entity, DetailedEntityDTO>();
-        config.NewConfig<Entity, CustomerEntityDTO>();
+        config.NewConfig<Entity, EntityProductDTO>();
 
         //PRODUCT
         config.NewConfig<Product, ProductDTO>()
         .Map(dest => dest.Date, src => src.Date.ToShortDateString());
 
-        config.NewConfig<Product, DetailedProductDTO>()
+        config.NewConfig<Product, CreateProductDTO>()
         .Map(dest => dest.Date, src => src.Date.ToShortDateString());
+
+        config.NewConfig<Product, CustomerProductDTO>();
 
     }
 }

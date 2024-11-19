@@ -44,27 +44,27 @@ namespace Infrastructure.Repositories
             return entity.Adapt<EntityDTO>();
         }
 
-        public async Task<DetailedEntityDTO> GetEntitiesWithProducts(int Id)
-        {
-            var customer = await _context.CustomerEntityProducts.FirstAsync(x => x.CustomerEntity.Customer.Id == Id);
-            var response = new DetailedEntityDTO
-            {
-                CustomerName = _context.CustomerEntity.First().Customer.FirstName,
-                CustomerEntities = _context.CustomerEntityProducts
-                                    .GroupBy(x => x.CustomerEntity).Select(x => new CustomerEntityDTO 
-                                    {
-                                        EntityName = x.First().CustomerEntity.Entity.Name,
-                                        Products = x.Select(p => new DetailedProductDTO
-                                        {
-                                            Name = p.Products.Name,
-                                            Status = p.Products.Status,
-                                            Description = p.Products.Description,
-                                            Date = p.Products.Date
-                                        }).ToList()
-                                    }) .ToList()
-            };
-            return response;
-        }
+        //public async Task<EntityDTO> GetEntitiesWithProducts(int Id)
+        //{
+        //    var customer = await _context.CustomerEntityProducts.FirstAsync(x => x.CustomerEntity.Customer.Id == Id);
+        //    var response = new EntityDTO
+        //    {
+        //        CustomerName = _context.CustomerEntity.First().Customer.FirstName,
+        //        CustomerEntities = _context.CustomerEntityProducts
+        //                            .GroupBy(x => x.CustomerEntity).Select(x => new EntityDTO
+        //                            {
+        //                                EntityName = x.First().CustomerEntity.Entity.Name,
+        //                                Products = x.Select(p => new ProductDTO
+        //                                {
+        //                                    Name = p.Products.Name,
+        //                                    Status = p.Products.Status,
+        //                                    Description = p.Products.Description,
+        //                                    Date = p.Products.Date
+        //                                }).ToList()
+        //                            }) .ToList()
+        //    };
+        //    return response;
+        //}
 
         private async Task<Entity> VerifyExists(int EntityId)
         {

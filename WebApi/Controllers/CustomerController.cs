@@ -65,5 +65,11 @@ public class CustomerController : ControllerBase
         return Ok(await _customerRepository.Delete(id));
     }
 
+    [HttpGet("Customer/get/products/{ProductId}")]
+    public async Task<IActionResult> GetProducts([FromRoute] int ProductId)
+    {
+        return Ok(await _customerRepository.GetProducts(ProductId));
+    }
+
 }
 

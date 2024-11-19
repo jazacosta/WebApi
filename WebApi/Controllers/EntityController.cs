@@ -31,11 +31,11 @@ namespace WebApi.Controllers
             return Ok(await _entityRepository.Create(createEntityRequest));
         }
 
-        [HttpGet("getAll/entitiesWithProducts/{Id}")]
-        public async Task<IActionResult> GetEntitiesWithProducts([FromRoute] int Id)
-        {
-            return Ok(await _entityRepository.GetEntitiesWithProducts(Id));
-        }
+        //[HttpGet("getAll/entitiesWithProducts/{Id}")]
+        //public async Task<IActionResult> GetEntitiesWithProducts([FromRoute] int Id)
+        //{
+        //    return Ok(await _entityRepository.GetEntitiesWithProducts(Id));
+        //}
         //validate!!
 
         [HttpPut("update")]

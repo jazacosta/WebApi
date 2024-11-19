@@ -1,6 +1,6 @@
 ﻿namespace Core.Entities;
 
-public class Product
+public class Product //EntityProduct
 {
     public int ProductId { get; set; }
     public string Name { get; set; } = string.Empty;

@@ -1,4 +1,5 @@
 ﻿using Core.DTOs.Customer;
+using Core.DTOs.Product;
 using Core.Entities;
 using Core.Interfaces.Repositories;
 using Core.Requests;
@@ -101,6 +102,24 @@ namespace Infrastructure.Repositories
             Phone = customer.Phone,
             BirthDate = customer.BirthDate
         };
+
+        public async Task<CustomerProductDTO> GetProducts(int id)
+        {
+            var customer = await VerifyExists(id);
+
+            if (customer is null)
+                throw new Exception("No se encontro el cliente con el id solicitado");
+
+            var customerWithProducts = await _context.Customers
+                .Include(x => x.CustomerEntities)
+                    .ThenInclude(x => x.Entity)
+                .Include(x => x.CustomerEntities)
+                    .ThenInclude(x => x.CustomerEntityProducts)
+                        .ThenInclude(x => x.Products)
+                .FirstAsync(x => x.Id == id);
+
+            return customerWithProducts.Adapt<CustomerProductDTO>();
+        }
 
         private async Task<Customer> VerifyExists(int id)
         {

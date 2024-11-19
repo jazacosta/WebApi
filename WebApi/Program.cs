@@ -1,5 +1,8 @@
 using Infrastructure;
 using WebApi.Middlewares;
+using Infrastructure.Services;
+using Core.Models;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,7 +26,9 @@ if (app.Environment.IsDevelopment())
 
 //app.UseMiddleware<ExceptionHandlerMiddleware>();
 
+app.UseCors();
 app.UseAuthorization();
+app.UseAuthentication();
 
 app.MapControllers();
 

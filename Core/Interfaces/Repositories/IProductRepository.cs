@@ -4,5 +4,5 @@ namespace Infrastructure.Repositories;
 
 public interface IProductRepository
 {
-    Task<DetailedProductDTO> Create(int EntityId, CreateProductDTO createProductDTO);
+    Task<ProductDTO> Create(int EntityId, CreateProductDTO createProductDTO);
 }

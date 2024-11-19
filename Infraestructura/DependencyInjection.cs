@@ -16,6 +16,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+
 
 namespace Infrastructure
 {
@@ -28,6 +32,7 @@ namespace Infrastructure
             services.AddValidations();
             services.AddMapping();
             services.AddServices();
+            services.AddAuth();
             
             return services;
         }
@@ -86,6 +91,53 @@ namespace Infrastructure
 
             return services;
         }
+
+        public static IServiceCollection AddAuth(this IServiceCollection services)
+        {
+            //var secretKey = configuration["Jwt:Key"];
+            //var issuer = configuration["Jwt:Issuer"];
+            //var audience = configuration["Jwt:Audience"];
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = JwtConfig.Issuer,
+                    ValidAudience = JwtConfig.Audience,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtConfig.Secret))
+                };
+            });
+
+            services.AddAuthorization(x =>
+            {
+                x.AddPolicy("Auth", p => p.RequireRole("admin"));
+            });
+
+            services.AddTransient<AuthService>();
+
+            return services;
+        }
+
+        //public static IServiceCollection AddAuthorizationPolicies(this IServiceCollection services)
+        //{
+        //    services.AddAuthorization(options =>
+        //    {
+        //        options.AddPolicy("SecurityOnly", policy => policy.RequireRole("security"));
+        //        options.AddPolicy("AdminOnly", policy => policy.RequireRole("admin"));
+        //        options.AddPolicy("AdminSecurity", policy => policy.RequireRole("admin", "security"));
+        //    });
+
+        //    return services;
+        //}
+
     }
 
 }
