@@ -2,7 +2,8 @@
 
 namespace Core.Interfaces.Services;
 
-public interface IAuthService
+public interface IAuthService   //for all post methods
 {
-    string GenerateToken(User user);
+    string CreateToken(User user);
+    bool ValidateJwt(string token);
 }

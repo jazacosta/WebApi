@@ -4,32 +4,33 @@ using Core.Models;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using WebApi.Controllers;
 
 namespace WebApi.Auth
 {
     public class AuthController : BaseApiController
     {
-        private readonly IAuthService _authservice;
+        private readonly IAuthService _authService;
 
         public AuthController(IAuthService authService)
         {
-            _authservice = authService; //your
+            _authService = authService; 
         }
 
-        [HttpGet("api/generate-token")]
-        public IActionResult GenerateToken() //AuthService authService, [FromBody] User user 
+        [HttpPost("api/generate-token")]
+        public IActionResult GenerateToken([FromBody] User user) //AuthService authService, [FromBody] User user 
         {
-            var user = new User
-            {
-                Id = 1,
-                UserName = "Jaz",
-                Roles = new List<string> { "admin", "security" }
-            };
-            var token = _authservice.GenerateToken(user);
-            //return Ok(_authService.GenerateToken(user));
-            //var token = _tokenService.GenerateToken(userDTO.UserName, userDTO.Role);
-            return Ok(new { token });
+            //var user = new User
+            //{
+            //    Id = 1,
+            //    UserName = "Jaz",
+            //    Roles = new List<string> { "admin", "security" }
+            //};
+            //var token = _authservice.
+            //    CreateToken(user);
+            return Ok(_authService.CreateToken(user));
+            //return Ok(new { token });
         }
 
         //private string GenerateToken1()
@@ -37,29 +38,41 @@ namespace WebApi.Auth
         //    return "fixed-token-example";
 
         //}
-        [HttpGet("api/protected-endpoint")]
-        [Authorize]
-        public IActionResult ProtectedEp()
+        [HttpPost("api/protected-endpoint")]
+        //[Authorize]
+        public IActionResult ProtectedEp([FromBody] string token)
         {
-            return Ok("This endpoint requires a valid JWT");
+            if (!_authService.ValidateJwt(token))
+                return Unauthorized("This endpoint requires a valid JWT");
+
+            return Ok(_authService.ValidateJwt(token));
         }
-        [HttpGet("api/protected-endpoint-security")]
+
         [Authorize(Roles = "admin")]
+        [HttpGet("api/protected-endpoint-admin")]
         public IActionResult AdminOnly()
         {
-            return Ok("This endpoint can be seen only by admin users");
+            var user = HttpContext.User;
+            var roles = user.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value);
+            return Ok($"This endpoint can be seen only by {string.Join(", ", roles)} users");
         }
-        [HttpGet("api/protected-endpoint-admin")]
+
         [Authorize(Roles = "security")]
+        [HttpGet("api/protected-endpoint-security")]
         public IActionResult SecurityOnly()
         {
-            return Ok("This endpoint can be seen only by security users");
+            var user = HttpContext.User;
+            var roles = user.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value);
+            return Ok($"This endpoint can be seen only by {roles} users");
         }
+
+        [Authorize(Roles = "admin, security")]
         [HttpGet("api/protected-endpoint-both")]
-        [Authorize(Roles = "admin,security")]
         public IActionResult AdminSecurity()
         {
-            return Ok("This endpoint can be seen only by either admin users, security users or both");
+            var user = HttpContext.User;
+            var roles = user.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value);
+            return Ok($"This endpoint can be seen only by {string.Join(", ", roles)} users");
         }
     }
 }

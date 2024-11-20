@@ -1,6 +1,7 @@
 ﻿using Core.Interfaces.Services;
 using Core.Models;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.SqlServer.Server;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -9,7 +10,7 @@ namespace Infrastructure.Services;
 
 public class AuthService : IAuthService
 {
-    //private readonly string _secretKey;
+    //private readonly string _secretKey;    //unnecessary
 
     //public AuthService(string secretKey)
     //{
@@ -45,16 +46,42 @@ public class AuthService : IAuthService
         claims.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
         claims.AddClaim(new Claim(ClaimTypes.Name, user.UserName));
 
-        foreach(var roles in user.Roles)
+        foreach(var rol in user.Roles)
         {
-            claims.AddClaim(new Claim(ClaimTypes.Role, roles));
+            claims.AddClaim(new Claim(ClaimTypes.Role, rol));
         }
 
         return claims;
     }
 
-    public string GenerateToken(User user)
+    public bool ValidateJwt(string token)
     {
-        throw new NotImplementedException();
+        var privateKey = Encoding.UTF8.GetBytes(JwtConfig.Secret);
+
+        try
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var validParameters = new TokenValidationParameters
+            {
+                ValidateAudience = false,
+                ValidateIssuer = false,
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(privateKey)
+            };
+
+            //tokenHandler.ValidateToken(token, validParameters, out _);
+            ClaimsPrincipal principal = tokenHandler.ValidateToken(token, validParameters, out SecurityToken validatedToken);
+            var usernameClaim = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+            var roleClaim = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+
+            return true;
+        } catch
+        {
+            return false;
+        }
+
+            
     }
+
+    
 }

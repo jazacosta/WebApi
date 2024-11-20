@@ -88,6 +88,7 @@ namespace Infrastructure
         {
             services.AddScoped<ICardService, CardService>();
             services.AddScoped<IEntityService, EntityService>();
+            services.AddScoped<IAuthService, AuthService>();
 
             return services;
         }
@@ -107,19 +108,19 @@ namespace Infrastructure
             {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuer = false,
+                    ValidateIssuer = false, //hacer metodo de validacion
                     ValidateAudience = false,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = JwtConfig.Issuer,
-                    ValidAudience = JwtConfig.Audience,
+                    //ValidIssuer = JwtConfig.Issuer,
+                    //ValidAudience = JwtConfig.Audience,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtConfig.Secret))
                 };
             });
 
-            services.AddAuthorization(x =>
-            {
-                x.AddPolicy("Auth", p => p.RequireRole("admin"));
-            });
+            //services.AddAuthorization(x =>
+            //{
+            //    x.AddPolicy("Auth", p => p.RequireRole("admin"));
+            //});
 
             services.AddTransient<AuthService>();
 
