@@ -37,7 +37,7 @@ namespace Infrastructure
             return services;
         }
 
-        //metodo de extension
+        //extension method
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
             services.AddScoped<ICustomerRepository, CustomerRepository>();
@@ -95,10 +95,6 @@ namespace Infrastructure
 
         public static IServiceCollection AddAuth(this IServiceCollection services)
         {
-            //var secretKey = configuration["Jwt:Key"];
-            //var issuer = configuration["Jwt:Issuer"];
-            //var audience = configuration["Jwt:Audience"];
-
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -108,36 +104,19 @@ namespace Infrastructure
             {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuer = false, //hacer metodo de validacion
+                    ValidateIssuer = false, 
                     ValidateAudience = false,
                     ValidateIssuerSigningKey = true,
-                    //ValidIssuer = JwtConfig.Issuer,
-                    //ValidAudience = JwtConfig.Audience,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtConfig.Secret))
                 };
             });
 
-            //services.AddAuthorization(x =>
-            //{
-            //    x.AddPolicy("Auth", p => p.RequireRole("admin"));
-            //});
+            
 
             services.AddTransient<AuthService>();
 
             return services;
         }
-
-        //public static IServiceCollection AddAuthorizationPolicies(this IServiceCollection services)
-        //{
-        //    services.AddAuthorization(options =>
-        //    {
-        //        options.AddPolicy("SecurityOnly", policy => policy.RequireRole("security"));
-        //        options.AddPolicy("AdminOnly", policy => policy.RequireRole("admin"));
-        //        options.AddPolicy("AdminSecurity", policy => policy.RequireRole("admin", "security"));
-        //    });
-
-        //    return services;
-        //}
 
     }
 

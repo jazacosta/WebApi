@@ -9,14 +9,7 @@ using System.Text;
 namespace Infrastructure.Services;
 
 public class AuthService : IAuthService
-{
-    //private readonly string _secretKey;    //unnecessary
-
-    //public AuthService(string secretKey)
-    //{
-    //    _secretKey = secretKey;
-    //}
-
+{ 
     public string CreateToken(User user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
@@ -25,11 +18,6 @@ public class AuthService : IAuthService
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            //Subject = new ClaimsIdentity(new[]
-            //{
-            //    new Claim(ClaimTypes.Name, UserName),
-            //    new Claim(ClaimTypes.Role, Role)
-            //}),
             Expires = DateTime.UtcNow.AddHours(1),
             SigningCredentials = credentials,
             Subject = GenerateClaims(user)
@@ -69,7 +57,6 @@ public class AuthService : IAuthService
                 IssuerSigningKey = new SymmetricSecurityKey(privateKey)
             };
 
-            //tokenHandler.ValidateToken(token, validParameters, out _);
             ClaimsPrincipal principal = tokenHandler.ValidateToken(token, validParameters, out SecurityToken validatedToken);
             var usernameClaim = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
             var roleClaim = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;

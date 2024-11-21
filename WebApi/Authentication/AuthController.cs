@@ -19,27 +19,12 @@ namespace WebApi.Auth
         }
 
         [HttpPost("api/generate-token")]
-        public IActionResult GenerateToken([FromBody] User user) //AuthService authService, [FromBody] User user 
-        {
-            //var user = new User
-            //{
-            //    Id = 1,
-            //    UserName = "Jaz",
-            //    Roles = new List<string> { "admin", "security" }
-            //};
-            //var token = _authservice.
-            //    CreateToken(user);
+        public IActionResult GenerateToken([FromBody] User user) 
+        { 
             return Ok(_authService.CreateToken(user));
-            //return Ok(new { token });
         }
 
-        //private string GenerateToken1()
-        //{
-        //    return "fixed-token-example";
-
-        //}
         [HttpPost("api/protected-endpoint")]
-        //[Authorize]
         public IActionResult ProtectedEp([FromBody] string token)
         {
             if (!_authService.ValidateJwt(token))
@@ -63,7 +48,7 @@ namespace WebApi.Auth
         {
             var user = HttpContext.User;
             var roles = user.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value);
-            return Ok($"This endpoint can be seen only by {roles} users");
+            return Ok($"This endpoint can be seen only by {string.Join(", ", roles)} users");
         }
 
         [Authorize(Roles = "admin, security")]
